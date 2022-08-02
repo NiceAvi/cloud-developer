@@ -18,10 +18,10 @@ router.get('/', async (req: Request, res: Response) => {
 
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
-router.get('/:id', async (req: Request, res: Response) => {
-    const items = await FeedItem.findAll({where: {id: req.body.id}});   
-    res.send(items);
-});
+// router.get('/:id', async (req: Request, res: Response) => {
+//     const items = await FeedItem.findAll({where: {id: req.body.id}});   
+//     res.send(items);
+// });
 
 // update a specific resource
 router.patch('/:id', 
@@ -60,15 +60,15 @@ router.post('/',
         return res.status(400).send({ message: 'File url is required' });
     }
 
-    const item = await new FeedItem({
+    const item = await FeedItem.create({
             caption: caption,
             url: fileName
     });
 
-    const saved_item = await item.save();
+    // const saved_item = await item.save();
 
-    saved_item.url = AWS.getGetSignedUrl(saved_item.url);
-    res.status(201).send(saved_item);
+    item.url = AWS.getGetSignedUrl(item.url);
+    res.status(201).send(item);
 });
 
 export const FeedRouter: Router = router;
